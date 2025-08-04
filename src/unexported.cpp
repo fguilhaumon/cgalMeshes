@@ -15,16 +15,14 @@ MeshT csoup2mesh(std::vector<PointT> points,
   const bool success = PMP::orient_polygon_soup(points, faces);
   if(!success) {
     Rcpp::warning("Polygon orientation failed.");
-    Rcpp::warning("Stiching borders.");
-    PMP::stitch_borders(mesh);
   }
 
-  const bool success = PMP::orient_polygon_soup(points, faces);
-  if(!success) {
-    Rcpp::warning("Polygon orientation failed again after stiching.");
-  }
   MeshT mesh;
   PMP::polygon_soup_to_polygon_mesh(points, faces, mesh);
+
+  Rcpp::warning("Stiching borders.");
+  PMP::stitch_borders(mesh);
+
   const bool valid = mesh.is_valid(false);
   if(!valid) {
     Rcpp::warning("The mesh is not valid.");
